@@ -36,7 +36,7 @@ data "aws_vpc_ipam_pool" "vpc" {
 }
 
 data "aws_ssm_parameter" "central_vpc_flow_logs_s3_bucket_arn" {
-  count    = var.enable_central_vpc_flow_logs && var.central_vpc_flow_logs_destination_arn == "" ? 1 : 0
+  count    = var.enable_central_vpc_flow_logs && var.central_vpc_flow_logs_destination_arn == null ? 1 : 0
   provider = aws.network
 
   name = "/org/core/network/vpc-flow-logs/s3-bucket-arn"
