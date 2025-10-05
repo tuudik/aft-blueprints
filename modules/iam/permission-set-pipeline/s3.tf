@@ -5,8 +5,8 @@ resource "aws_s3_bucket" "pipeline" {
   #checkov:skip=CKV2_AWS_62: This bucket does not use event notifications
   #checkov:skip=CKV2_AWS_61: This bucket does not need a lifecycle configuration
   #checkov:skip=CKV_AWS_144: This bucket does not need cross-region replication enabled
-  #checkov:skip=CKV_AWS_18: This bucket does not need access logging enabled  
-  bucket = "${var.solution_name}-codebuild-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.name}"
+  #checkov:skip=CKV_AWS_18: This bucket does not need access logging enabled
+  bucket = "${var.solution_name}-codebuild-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.region}"
   tags   = var.tags
 }
 
@@ -37,12 +37,33 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "pipeline" {
   }
 }
 
+resource "aws_s3_bucket_policy" "pipeline" {
+  bucket = aws_s3_bucket.pipeline.id
+
+  policy = jsonencode({
+    Statement = [{
+      Effect    = "Deny"
+      Principal = "*"
+      Action    = "s3:*"
+      Resource = [
+        aws_s3_bucket.pipeline.arn,
+        "${aws_s3_bucket.pipeline.arn}/*"
+      ]
+      Condition = {
+        Bool = {
+          "aws:SecureTransport" = "false"
+        }
+      }
+    }]
+  })
+}
+
 resource "aws_s3_bucket" "tf_backend" {
   #checkov:skip=CKV2_AWS_62: This bucket does not use event notifications
   #checkov:skip=CKV2_AWS_61: This bucket does not need a lifecycle configuration
   #checkov:skip=CKV_AWS_144: This bucket does not need cross-region replication enabled
   #checkov:skip=CKV_AWS_18: This bucket does not need access logging enabled
-  bucket = "${var.solution_name}-tf-backend-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.name}"
+  bucket = "${var.solution_name}-tf-backend-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.region}"
   tags   = var.tags
 }
 
@@ -71,4 +92,25 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "tf_backend_encryp
       sse_algorithm     = "aws:kms"
     }
   }
+}
+
+resource "aws_s3_bucket_policy" "tf_backend" {
+  bucket = aws_s3_bucket.tf_backend.id
+
+  policy = jsonencode({
+    Statement = [{
+      Effect    = "Deny"
+      Principal = "*"
+      Action    = "s3:*"
+      Resource = [
+        aws_s3_bucket.tf_backend.arn,
+        "${aws_s3_bucket.tf_backend.arn}/*"
+      ]
+      Condition = {
+        Bool = {
+          "aws:SecureTransport" = "false"
+        }
+      }
+    }]
+  })
 }

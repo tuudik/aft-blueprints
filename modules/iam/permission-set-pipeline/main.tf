@@ -4,7 +4,7 @@
 # Codeconnection for github
 resource "aws_codeconnections_connection" "github" {
   count         = local.vcs.is_github ? 1 : 0
-  name          = "${var.solution_name}-conn"
+  name          = var.solution_name
   provider_type = "GitHub"
 }
 
@@ -33,7 +33,7 @@ resource "aws_codeconnections_host" "githubenterprise" {
 }
 
 resource "aws_codecommit_repository" "pipeline" {
-  #checkov:skip=CKV2_AWS_37: An approval rule can be set up after the deployment.
+  #checkov:skip=CKV2_AWS_37: An approval rule can be set up after the deployment
   count = local.vcs.is_codecommit ? 1 : 0
 
   repository_name = var.repository_name
