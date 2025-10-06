@@ -4,7 +4,7 @@
 # Codeconnection for github
 resource "aws_codeconnections_connection" "github" {
   count         = local.vcs.is_github ? 1 : 0
-  name          = var.solution_name
+  name          = "${var.solution_name}-gh"
   provider_type = "GitHub"
 }
 
