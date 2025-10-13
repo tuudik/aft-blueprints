@@ -67,6 +67,7 @@ set_up_profile $AFT_MGMT_ACCOUNT $AFT_ADMIN_ROLE_NAME $AFT_ADMIN_PROFILE
 
 if [[ "$TF_ARGS" == *init* ]]
 then
+  TF_VERSION=$(aws ssm get-parameter --name "/aft/config/terraform/version" --query "Parameter.Value" --output text)
   TF_DISTRIBUTION=$(aws ssm get-parameter --name "/aft/config/terraform/distribution" --query "Parameter.Value" --output text)
   AFT_EXEC_ROLE_NAME=$(aws ssm get-parameter --name /aft/resources/iam/aft-execution-role-name --query "Parameter.Value" --output text)
   TF_BACKEND_REGION=$(aws ssm get-parameter --name "/aft/config/oss-backend/primary-region" --query "Parameter.Value" --output text)
@@ -87,7 +88,8 @@ then
               -D bucket=$TF_S3_BUCKET \
               -D key=$TF_S3_KEY \
               -D dynamodb_table=$TF_DDB_TABLE \
-              -D kms_key_id=$TF_KMS_KEY_ID > ./$(basename $f .jinja).tf
+              -D kms_key_id=$TF_KMS_KEY_ID \
+              -D tf_version=$TF_VERSION > ./$(basename $f .jinja).tf
   done
 fi
 
