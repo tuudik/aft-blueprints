@@ -41,6 +41,7 @@ resource "aws_s3_bucket_policy" "pipeline" {
   bucket = aws_s3_bucket.pipeline.id
 
   policy = jsonencode({
+    Version = "2012-10-17"
     Statement = [{
       Effect    = "Deny"
       Principal = "*"
@@ -98,6 +99,7 @@ resource "aws_s3_bucket_policy" "tf_backend" {
   bucket = aws_s3_bucket.tf_backend.id
 
   policy = jsonencode({
+    Version = "2012-10-17"
     Statement = [{
       Effect    = "Deny"
       Principal = "*"
