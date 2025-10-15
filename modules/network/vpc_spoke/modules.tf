@@ -59,6 +59,6 @@ module "central_vpc_flow_logs" {
   resource_id               = aws_vpc.this.id
   resource_name             = "${local.vpc_name}-${local.region}"
   destination_type          = "s3"
-  s3_destination_bucket_arn = var.central_vpc_flow_logs_destination_arn == "" ? data.aws_ssm_parameter.central_vpc_flow_logs_s3_bucket_arn[0].value : var.central_vpc_flow_logs_destination_arn
+  s3_destination_bucket_arn = var.central_vpc_flow_logs_destination_arn == null ? data.aws_ssm_parameter.central_vpc_flow_logs_s3_bucket_arn[0].value : var.central_vpc_flow_logs_destination_arn
   tags                      = var.tags
 }

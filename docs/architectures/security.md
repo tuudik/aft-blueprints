@@ -217,3 +217,5 @@ Amazon GuardDuty provides intelligent threat detection across the AWS organizati
 - **Quality Assurance**: Continuous quality assurance and validation of detection capabilities
 
 This comprehensive security services architecture provides enterprise-grade threat detection, security monitoring, and compliance management across the entire AWS organization while maintaining operational efficiency and cost-effectiveness.
+## Organization Policy Pipeline
+![Organization Policy Pipeline](../static/aws-org-pipeline.png)

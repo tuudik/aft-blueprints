@@ -7,6 +7,7 @@ module "tgw" {
   amazon_side_asn   = var.tgw_amazon_side_asn
   route_tables      = local.tgw_route_tables
   propagation_rules = local.tgw_propagation_rules
+  region_name       = var.region_name
 }
 
 module "tgw_routing" {
